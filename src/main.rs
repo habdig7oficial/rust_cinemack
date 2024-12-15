@@ -6,11 +6,11 @@ struct Filme {
   sessao: Vec<u32>,
   avaliacao: Vec<u8>
 }
-fn print_filmes(filmes: Vec<Filme>) -> u8{
+fn print_filmes(filmes: &Vec<Filme>) -> u8{
   for i in 0..filmes.len(){
     println!("{}) {}", i + 1, &filmes[i].nome);
   }
-  let opt_filme: u8 = rm_endl(input("Escolha um filme:"))
+  let opt_filme: u8 = rm_endl(input("\nEscolha um filme:"))
       .parse()
       .unwrap();
   if usize::from(opt_filme) > filmes.len() || opt_filme == 0 {
@@ -21,6 +21,11 @@ fn print_filmes(filmes: Vec<Filme>) -> u8{
   println!("Filme {} selecionado!", &filmes[usize::from(opt_filme) - 1].nome);
   return opt_filme;
   }
+}
+
+fn verifica_sessao(opt: u8, filmes: Vec<Filme>){
+  println!("\nEscolha entre uma as sessões disponíveis: ");
+  println!("{}", filmes[usize::from(opt) - 1].sessao.len());
 }
 
 fn main() {
@@ -40,9 +45,11 @@ fn main() {
      Filme{
         nome: String::from("Alcides no país dos Fluxogramas"),
         capacidade: 30,
-        sessao: vec![0, 0],  
+        sessao: vec![0, 0 ,0],  
         avaliacao: vec![],
      },
      ];
-     print_filmes(filmes);
+     println!("-- CINEMACK --\n");
+     let opt = print_filmes(&filmes);
+     verifica_sessao(opt, filmes);
 }
