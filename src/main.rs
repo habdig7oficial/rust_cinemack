@@ -1,11 +1,18 @@
 mod basic;
 use crate::basic::*;
+use chrono::prelude::*;
 struct Filme {
   nome: String,
   capacidade: u32,
-  sessao: Vec<u32>,
+  sessao: Vec<Sessao>,
   avaliacao: Vec<u8>
 }
+struct Sessao {
+  hora: DateTime<Local>,
+  lotacao: u32
+}
+
+
 fn print_filmes(filmes: &Vec<Filme>) -> u8{
   for i in 0..filmes.len(){
     println!("{}) {}", i + 1, &filmes[i].nome);
@@ -23,9 +30,22 @@ fn print_filmes(filmes: &Vec<Filme>) -> u8{
   }
 }
 
-fn verifica_sessao(opt: u8, filmes: Vec<Filme>){
-  println!("\nEscolha entre uma as sessões disponíveis: ");
-  println!("{}", filmes[usize::from(opt) - 1].sessao.len());
+fn verifica_sessao(opt_filme: u8, filmes: Vec<Filme>) -> u8 {
+  println!("\nSessões: ");
+  for i in 0..filmes[usize::from(opt_filme) - 1].sessao.len() {
+    println!("{}) {}", i + 1, filmes[usize::from(opt_filme) - 1].sessao[i].hora);
+  }
+  
+  let opt_sessao: u8 = rm_endl(input("\nEscolha entre uma as sessões disponíveis: ")).parse().unwrap();
+
+  if usize::from(opt_sessao) > filmes[usize::from(opt_filme) - 1].sessao.len() || opt_sessao == 0 {
+    println!("Sessão {opt_sessao} inválida");
+    return verifica_sessao(opt_filme, filmes);
+  }
+  else {
+    return opt_sessao;
+  }
+
 }
 
 fn main() {
@@ -33,19 +53,43 @@ fn main() {
      Filme{
         nome: String::from("Elisangela.py"),
         capacidade: 50,
-        sessao: vec![0, 0],  
+        sessao: vec![
+          Sessao{
+            hora: Local::now(),
+            lotacao: 0
+          }, 
+          Sessao{
+            hora: Local::now(),
+            lotacao: 0
+          }],  
         avaliacao: vec![],
      },
      Filme{
         nome: String::from("JamilINO"),
         capacidade: 40,
-        sessao: vec![0, 0],  
+        sessao: vec![
+          Sessao{
+            hora: Local::now(),
+            lotacao: 0
+          }, 
+          Sessao{
+            hora: Local::now(),
+            lotacao: 0
+          }],  
         avaliacao: vec![],
      },
      Filme{
         nome: String::from("Alcides no país dos Fluxogramas"),
         capacidade: 30,
-        sessao: vec![0, 0 ,0],  
+        sessao: vec![
+          Sessao{
+            hora: Local::now(),
+            lotacao: 0
+          }, 
+          Sessao{
+            hora: Local::now(),
+            lotacao: 0
+          }],  
         avaliacao: vec![],
      },
      ];
